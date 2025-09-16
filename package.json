@@ -1,5 +1,5 @@
 {
-  "name": "murorecuerdos",
+  "name": "recruitment-portal",
   "version": "0.1.0",
   "private": true,
   "engines": {
@@ -17,16 +17,19 @@
     "@heroui/react": "~2.7.10",
     "@reduxjs/toolkit": "^2.8.2",
     "framer-motion": "~12.18.1",
+    "lucide-react": "^0.544.0",
     "next": "^14.2.30",
     "next-auth": "^4.24.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.2.0",
-    "swiper": "^11.2.8"
+    "swiper": "^11.2.10"
   },
   "devDependencies": {
+    "@eslint/config-array": "^0.21.0",
+    "@eslint/object-schema": "^2.1.6",
     "@svgr/webpack": "^8.1.0",
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-next": "14.2.30",
     "postcss": "^8",
     "sass": "^1.89.2",

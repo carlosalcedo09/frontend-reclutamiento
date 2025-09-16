@@ -1,6 +1,6 @@
 'use client';
-import LoginContent from '@/components/pages/login/LoginContent';
-const LoginPage = () => {
-	return <LoginContent />;
+import MenuContent from '@/components/pages/menu/MenuContent';
+const MenuPage = () => {
+	return <MenuContent />;
 };
-export default LoginPage;
+export default MenuPage;
