@@ -1,0 +1,41 @@
+@use '@/style/_mixins.scss' as *;
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100;200;300;400;500;600;700&display=swap');
+
+html,
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: 'DM Sans', sans-serif;
+}
+
+[data-overlay-container='true'] {
+	height: 100%;
+}
+
+.button {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+	font-size: 16px;
+	font-weight: 600;
+	padding: 4px;
+	border-radius: 16px;	
+	@include media-up(tablet) {
+		padding: 14px;
+	}
+	&_green {
+		color: white;
+		border-color: #58cc02;
+		background-color: #58cc02;
+	}
+	&_outline {
+		color: black;
+		border-width: 1px;
+		background-color: transparent;
+	}
+}

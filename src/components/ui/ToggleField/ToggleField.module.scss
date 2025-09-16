@@ -1,0 +1,19 @@
+.ToggleField {
+	width: initial;
+	display: inline-block;
+	border: 1px solid;
+	border-radius: 16px;
+	border-color: #1e454f;
+	font-size: 12px;
+	font-weight: 600;
+	overflow: hidden;
+}
+
+.toggle_item {
+	border-radius: 16px;
+	padding: 5px 18px;
+	&.active {
+		color: white;
+		background-color: #58cc02;
+	}
+}

@@ -1,0 +1,24 @@
+.SelectField {
+	padding-right: 6px;
+	border-radius: 16px;
+	background-color: white;
+	select {
+		min-width: 118px;
+		font-size: 14px;
+		font-weight: 400;
+		padding: 6px;
+		background-color: transparent;
+		&:focus {
+			outline: none;
+		}
+	}
+}
+
+.toggle_item {
+	border-radius: 16px;
+	padding: 5px 18px;
+	&.active {
+		color: white;
+		background-color: #58cc02;
+	}
+}
