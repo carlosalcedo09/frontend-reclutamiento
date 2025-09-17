@@ -3,6 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
+	Avatar,
+	Dropdown,
+	DropdownItem,
+	DropdownMenu,
+	DropdownTrigger,
 	Navbar,
 	NavbarBrand,
 	NavbarContent,
@@ -11,9 +16,19 @@ import {
 	NavbarMenuItem,
 	NavbarMenuToggle,
 } from '@heroui/react';
+import { User } from 'lucide-react';
 
 export default function NavbarApp() {
-	const [isLoggedIn, setIsLoggedIn] = useState(true); // o gestionarlo via provider/global state
+	const [isLoggedIn, setIsLoggedIn] = useState(true); // 🔹 simula login/logout
+	const userEmail = 'zoey@example.com';
+
+	// 🔹 Definimos los links en un array
+	const menuItems = [
+		{ href: '/', label: 'Inicio' },
+		{ href: '/ofertas-laborales', label: 'Ofertas Laborales' },
+		{ href: '/preguntas-frecuentes', label: 'Preguntas Frecuentes' },
+		...(isLoggedIn ? [{ href: '/mis-postulaciones', label: 'Mis Postulaciones' }] : []),
+	];
 
 	return (
 		<Navbar
@@ -24,7 +39,6 @@ export default function NavbarApp() {
 			isBordered
 			style={{ backgroundColor: '#003b99', color: 'white' }}
 		>
-			{/* Contenedor limitado a 1440px */}
 			{/* Brand */}
 			<NavbarBrand>
 				<Link href="/" className="text-white font-bold text-lg">
@@ -32,50 +46,85 @@ export default function NavbarApp() {
 				</Link>
 			</NavbarBrand>
 
-			{/* Desktop Links */}
-			<NavbarContent className="hidden md:flex !justify-end flex-grow">
-				<NavbarItem>
-					<Link href="/" className="text-white hover:underline">
-						Inicio
-					</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href="/ofertas-laborales" className="text-white hover:underline">
-						Ofertas Laborales
-					</Link>
-				</NavbarItem>
-				<NavbarItem>
-					<Link href="/ofertas-laborales" className="text-white hover:underline">
-						Preguntas Frecuentes
-					</Link>
-				</NavbarItem>
-				{isLoggedIn && (
-					<NavbarItem>
-						<Link href="/mis-postulaciones" className="text-white hover:underline">
-							Mis Postulaciones
+			{/* Desktop Links + Avatar */}
+			<NavbarContent className="hidden md:flex gap-6" justify="end">
+				{menuItems.map((item) => (
+					<NavbarItem key={item.href}>
+						<Link href={item.href} className="text-white hover:underline">
+							{item.label}
 						</Link>
 					</NavbarItem>
-				)}
+				))}
+
+				{/* Avatar dinámico */}
+				<NavbarItem>
+					<Dropdown placement="bottom-end">
+						<DropdownTrigger>
+							{isLoggedIn ? (
+								<Avatar
+									isBordered
+									as="button"
+									size="sm"
+									src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+								/>
+							) : (
+								<Avatar
+									isBordered
+									as="button"
+									size="sm"
+									className="bg-blue-600 text-white flex items-center justify-center"
+								>
+									<User size={18} />
+								</Avatar>
+							)}
+						</DropdownTrigger>
+						<DropdownMenu aria-label="Profile Actions" variant="flat">
+							{isLoggedIn ? (
+								<>
+									<DropdownItem key="profile" className="h-14 gap-2">
+										<p className="font-semibold">Signed in as</p>
+										<p className="font-semibold">{userEmail}</p>
+									</DropdownItem>
+									<DropdownItem key="settings">
+										<Link href="/usuario/">Mi perfil</Link>
+									</DropdownItem>
+									<DropdownItem
+										key="logout"
+										color="danger"
+										onClick={() => setIsLoggedIn(false)}
+									>
+										Log Out
+									</DropdownItem>
+								</>
+							) : (
+								<>
+									<DropdownItem key="login">
+										<Link href="/usuario/login" className="w-full">
+											Loguearse
+										</Link>
+									</DropdownItem>
+									<DropdownItem key="register">
+										<Link href="/usuario/registro" className="w-full">
+											Registrarse
+										</Link>
+									</DropdownItem>
+								</>
+							)}
+						</DropdownMenu>
+					</Dropdown>
+				</NavbarItem>
 			</NavbarContent>
 
-			{/* Mobile Menu Toggle */}
+			{/* Mobile */}
 			<div className="md:hidden ml-auto">
 				<NavbarMenuToggle />
 			</div>
-
-			{/* Mobile Menu */}
 			<NavbarMenu className="md:hidden">
-				<NavbarMenuItem>
-					<Link href="/">Inicio</Link>
-				</NavbarMenuItem>
-				<NavbarMenuItem>
-					<Link href="/postulaciones">Postulaciones</Link>
-				</NavbarMenuItem>
-				{isLoggedIn && (
-					<NavbarMenuItem>
-						<Link href="/mis-postulaciones">Mis Postulaciones</Link>
+				{menuItems.map((item) => (
+					<NavbarMenuItem key={item.href}>
+						<Link href={item.href}>{item.label}</Link>
 					</NavbarMenuItem>
-				)}
+				))}
 			</NavbarMenu>
 		</Navbar>
 	);

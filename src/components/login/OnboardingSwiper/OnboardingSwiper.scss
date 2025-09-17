@@ -76,7 +76,7 @@
 				cursor: pointer;
 				background-color: rgba(0, 0, 0, 0.5);
 				&-active {
-					background-color: #58cc02;
+					background-color: #003b99;
 				}
 			}
 		}
@@ -97,13 +97,13 @@
 			width: 100%;
 			margin-bottom: 16px;
 			border-radius: 16px;
-			background-color: #58cc02;
+			background-color: #003b99;
 			font-size: 18px;
 			font-weight: 700;
 			padding: 6px;
 			color: white;
 			&-outline {
-				border: 1px solid #58cc02;
+				border: 1px solid #003b99;
 				background-color: transparent;
 			}
 		}

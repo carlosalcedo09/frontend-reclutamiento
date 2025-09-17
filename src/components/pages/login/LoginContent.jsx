@@ -1,63 +1,75 @@
 'use client';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import EmailIcon from '@/components/icons/EmailIcon.svg';
-import PasswordIcon from '@/components/icons/PasswordIcon.svg';
-import OnboardingSwiper from '@/components/login/OnboardingSwiper';
-import style from '@/components/pages/login/LoginContent.module.scss';
+import { Mail, Lock } from 'lucide-react';
 import InputField from '@/components/ui/InputField';
+import OnboardingSwiper from '@/components/login/OnboardingSwiper';
 
 const LoginContent = () => {
 	const router = useRouter();
-	const login = () => {
-		router.push('dashboard/results', { scroll: false, shallow: false });
-	};
-	return (
-		<section className="LoginContent flex h-full">
-			<OnboardingSwiper />
 
-			<div className="w-full flex justify-center items-center ">
-				<div className="p-8 w-full max-w-[456px]">
-					<form>
-						<div className="text-[2rem] font-bold text-center mb-3">
-							<img
-								src="https://s3.amazonaws.com/remanso.com.pe/wp-content/uploads/2023/03/25063043/logo-1.svg"
-								alt="El Remanso Camposanto"
-								className="mx-auto"
-							/>
-						</div>
-						<div className="text-[2rem] font-bold text-center mb-3">¡Bienvenido!</div>
-						<div className="ttext-base font-medium text-center mb-9">
-							Ingresa a tu cuenta
-						</div>
+	const login = () => {
+		router.push('/usuario', { scroll: false, shallow: false });
+	};
+
+	return (
+		<section className="flex min-h-screen scrollbar-hide bg-gray-50">
+			{/* Lado Izquierdo - Onboarding / Imagen */}
+
+			<OnboardingSwiper isHiddenOnMobile={true} />
+
+			{/* Lado Derecho - Login (sin card, full height/width) */}
+			<div className="w-full lg:w-1/2 flex justify-center items-center bg-gray-50">
+				<div className="p-12 w-full max-w-[500px]">
+					{/* Títulos */}
+					<div className="text-3xl font-bold text-center mb-2">¡Bienvenido!</div>
+					<div className="text-base text-gray-600 font-medium text-center mb-10">
+						Ingresa a tu cuenta
+					</div>
+
+					{/* Formulario */}
+					<form className="space-y-6">
 						<InputField
 							type="text"
 							name="email"
-							className="mb-5"
 							label="Correo electrónico"
-							icon={<EmailIcon className="w-6 h-6 mr-1" />}
+							icon={<Mail className="w-5 h-5 mr-2 text-gray-500" />}
 						/>
 						<InputField
 							type="password"
 							name="password"
-							className="mb-2"
 							label="Contraseña"
-							icon={<PasswordIcon className="w-6 h-6 mr-1" />}
+							icon={<Lock className="w-5 h-5 mr-2 text-gray-500" />}
 						/>
-						<div className="text-xs text-right font-medium mb-5">
+						<div className="text-sm text-right text-blue-600 font-medium hover:underline cursor-pointer">
 							¿Olvidaste tu contraseña?
 						</div>
+
+						{/* Botón */}
 						<button
 							type="button"
-							onClick={() => login()}
-							className="w-full block p-2 bg-black text-center rounded-xl text-white font-bold mb-7"
+							onClick={login}
+							className="w-full py-3 bg-[#003b99] hover:bg-[#002a6e] text-white font-semibold rounded-xl transition-colors"
 						>
 							Iniciar Sesión
 						</button>
+
+						{/* Registro */}
+						<div className="text-center text-sm text-gray-500">
+							¿No tienes una cuenta?{' '}
+							<Link
+								href="/usuario/registro"
+								className="text-blue-600 font-medium hover:underline"
+							>
+								Regístrate aquí
+							</Link>
+						</div>
 					</form>
 				</div>
 			</div>
 		</section>
 	);
 };
+
 export default LoginContent;
