@@ -5,6 +5,7 @@ import './globals.css';
 import './mystyle.scss';
 import Container from '@/components/container/Container';
 import NavbarApp from '@/components/ui/NavBar';
+import SessionWrapper from '@/providers/SessionWraper';
 
 const raleway = Raleway({
 	weight: ['400', '500', '600', '700'],
@@ -21,13 +22,15 @@ export default function RootLayout(props) {
 	return (
 		<html lang="es">
 			<body className={`${raleway.className} antialiased flex flex-col min-h-screen`}>
-				<HeroProvider>
-					<StoreProvider>
-						{' '}
-						<NavbarApp />
-						<Container>{children}</Container>
-					</StoreProvider>
-				</HeroProvider>
+				<SessionWrapper>
+					<HeroProvider>
+						<StoreProvider>
+							{' '}
+							<NavbarApp />
+							<Container>{children}</Container>
+						</StoreProvider>
+					</HeroProvider>
+				</SessionWrapper>
 			</body>
 		</html>
 	);

@@ -2,15 +2,31 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, User } from 'lucide-react';
 import InputField from '@/components/ui/InputField';
 import OnboardingSwiper from '@/components/login/OnboardingSwiper';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 const LoginContent = () => {
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const [error, setError] = useState('');
+
 	const router = useRouter();
 
-	const login = () => {
-		router.push('/usuario', { scroll: false, shallow: false });
+	const login = async (e) => {
+		e.preventDefault();
+		const res = await signIn('credentials', {
+			redirect: false,
+			username,
+			password,
+		});
+		if (res.error) {
+			setError('Usuario o contraseña inválidos');
+		} else {
+			router.push('/');
+		}
 	};
 
 	return (
@@ -32,13 +48,17 @@ const LoginContent = () => {
 					<form className="space-y-6">
 						<InputField
 							type="text"
-							name="email"
-							label="Correo electrónico"
-							icon={<Mail className="w-5 h-5 mr-2 text-gray-500" />}
+							name="username"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+							label="Nombre de usuario"
+							icon={<User className="w-5 h-5 mr-2 text-gray-500" />}
 						/>
 						<InputField
 							type="password"
 							name="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
 							label="Contraseña"
 							icon={<Lock className="w-5 h-5 mr-2 text-gray-500" />}
 						/>

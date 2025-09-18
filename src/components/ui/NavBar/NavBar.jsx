@@ -17,11 +17,12 @@ import {
 	NavbarMenuToggle,
 } from '@heroui/react';
 import { User } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function NavbarApp() {
-	const [isLoggedIn, setIsLoggedIn] = useState(true); // 🔹 simula login/logout
-	const userEmail = 'zoey@example.com';
-
+	const { data: session, status } = useSession();
+	const isLoggedIn = status === 'authenticated';
+	const userEmail = session?.user?.email;
 	// 🔹 Definimos los links en un array
 	const menuItems = [
 		{ href: '/', label: 'Inicio' },
@@ -88,10 +89,13 @@ export default function NavbarApp() {
 									<DropdownItem key="settings">
 										<Link href="/usuario/">Mi perfil</Link>
 									</DropdownItem>
+									<DropdownItem key="settings">
+										<Link href="/usuario/">Mi CV</Link>
+									</DropdownItem>
 									<DropdownItem
 										key="logout"
 										color="danger"
-										onClick={() => setIsLoggedIn(false)}
+										onClick={() => signOut({ callbackUrl: '/' })}
 									>
 										Log Out
 									</DropdownItem>
