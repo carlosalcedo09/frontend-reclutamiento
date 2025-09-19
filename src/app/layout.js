@@ -6,6 +6,8 @@ import './mystyle.scss';
 import Container from '@/components/container/Container';
 import NavbarApp from '@/components/ui/NavBar';
 import SessionWrapper from '@/providers/SessionWraper';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const raleway = Raleway({
 	weight: ['400', '500', '600', '700'],
@@ -27,7 +29,10 @@ export default function RootLayout(props) {
 						<StoreProvider>
 							{' '}
 							<NavbarApp />
-							<Container>{children}</Container>
+							<Container>
+								{children}
+								<ToastContainer position="bottom-right" autoClose={3000} />
+							</Container>
 						</StoreProvider>
 					</HeroProvider>
 				</SessionWrapper>
