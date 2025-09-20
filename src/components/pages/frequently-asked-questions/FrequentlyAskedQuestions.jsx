@@ -119,7 +119,7 @@ export default function FrequentlyAskedQuestions() {
 					disponibles en nuestra plataforma.
 				</p>
 				<a
-					href="/postulaciones"
+					href="/ofertas-laborales"
 					className="inline-block bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all"
 				>
 					Explorar ofertas laborales

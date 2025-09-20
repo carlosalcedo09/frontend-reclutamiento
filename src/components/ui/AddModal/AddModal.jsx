@@ -2,58 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import InputField from '@/components/ui/InputField';
-import SelectField from "../SelectField";
-import CustomSelect from "@/components/ui/CustomSelectTable";
+import {  Heart,
+  Building,
+  BadgeCheck,
+  House,
+  Clock2,
+  ClockFading,
+  Gpu,
+  Banknote,} from "lucide-react";
 
-const statusOptions = ["Selecciona el estado","Activo", "Inactivo"];
-const permissionOptions = ["Selecciona el tipo de permiso","Administrador", "Editor", "Usuario"];
-
-export default function AddModal({ isOpen, onClose, onSave, person }) {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    startDate: "",
-    endDate: "",
-    status: "Selecciona el estado",  
-    permission: "Selecciona el tipo de permiso",
-  });
-
+export default function AddModal({ isOpen, onClose, data }) {
   
-  useEffect(() => {
-    if (person) {
+  const { selectedIndex, all } = data;
 
-      console.log(person.name)
-      setForm({
-      name: person.name || "",
-      email: person.email || "",
-      startDate: person.startDate || "",
-      endDate: person.endDate || "",
-      status: person.status || "Inactivo",
-      permission: person.permission || "Usuario",
-    });
-    } else {
-      setForm({
-        name: "",
-        email: "",
-        startDate: "",
-        endDate: "",
-        status: "Inactivo",
-        permission: "Usuario",
-      });
-    }
-  }, [person, isOpen]);
-
-  const handleChange = (key, value) => {
-    setForm({ ...form, [key]: value });
-  };
-
-  const handleSubmit = () => {
-    if (!form.name || !form.email) return;
-    onSave(form, person); 
-    onClose();
-  };
-
+  const selectedOffer = all[selectedIndex];
+ 
   return (
     <AnimatePresence>
       {isOpen && (
@@ -71,9 +34,9 @@ export default function AddModal({ isOpen, onClose, onSave, person }) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed top-0 right-0 h-full w-full md:w-1/3 bg-white shadow-2xl z-50 flex flex-col px-12 py-24"
+            className="fixed top-0 right-0 h-full w-full md:w-1/3 bg-white shadow-2xl z-50 flex flex-col px-6 py-4 md:px-10 md:py-16 lg:px-10 lg:py-16"
           >
-            <div className="flex justify-end p-8">
+            <div className="flex justify-end p-8 md:p-6 lg:p-8">
                 <button onClick={onClose} className="text-2xl">
                     ✕
                 </button>
@@ -81,107 +44,95 @@ export default function AddModal({ isOpen, onClose, onSave, person }) {
 
 
             <div className="flex-1 overflow-y-auto p-6 space-y-4">
-              <h2 className="text-2xl font-bold mb-6">{person ? "Editar cuenta" : "Agregar cuenta"}</h2>
 
-              <InputField
-                type="text"
-                value={form.name}
-                label="Nombres de usuario"
-                onChange={(e) => handleChange("name", e.target.value)}
-              />
-
-              <InputField
-                type="email"
-                value={form.email}
-                label="Correo"
-                onChange={(e) => handleChange("email", e.target.value)}
-              />
-
-              <div className="grid grid-cols-2 gap-4">
-                <InputField
-                  type="date"
-                  value={form.startDate}
-                  label="Fecha de inicio"
-                  onChange={(e) => handleChange("startDate", e.target.value)}
-                />
-
-                <InputField
-                  type="date"
-                  value={form.endDate}
-                  label="Fecha de fin"
-                  onChange={(e) => handleChange("endDate", e.target.value)}
-                />
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">{selectedOffer.title}</h2>
+                {selectedOffer.is_urgent && (
+                  <span className="text-xs font-bold text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
+                    Urgente
+                  </span>
+                )}
               </div>
 
-              <div  className="w-full">
-                <label className="c_input_label flex items-center mb-1 text-black py-1">
-                  <div className="text-sm">Estado</div>
-                </label>
-                <CustomSelect
-                  value={form.status}   
-                  onChange={(val) => handleChange("status", val)}
-                  options={statusOptions}
-                  className="w-full"
-                  styleMap={{
-                    Activo: {
-                      classes: "bg-green-500 text-white",
-                      icon: "text-white",
-                    },
-                    Inactivo: {
-                      classes: "bg-[#F2F2F2] text-black",
-                      icon: "text-black",
-                    },
-                    "Selecciona el estado":{
-                      classes: "bg-[#F2F2F2] text-black",
-                      icon: "text-black",
-                    }
-                  }}
-                />
+        
+               <div className="flex items-center gap-2 py-2">
+                  <div className="bg-blue-900 w-7 h-7 flex items-center justify-center rounded-full">
+                  <BadgeCheck className="w-4 h-4 text-white" />
+                  </div>
+                <p className="text-black text-sm">{selectedOffer.company}</p>
+              </div>
+              <p className="text-gray-600 text-sm">{selectedOffer.location}</p>
+              <p className="py-3 text-gray-700 text-sm">{selectedOffer.description}</p>
+              
+              <div className="flex gap-4">
+                <div className="flex items-center gap-2 py-1">
+                    {selectedOffer.mode === "Remoto" && <House className="w-4 h-4 text-gray-500" />}
+                    {selectedOffer.mode === "Presencial" && <Building className="w-4 h-4 text-gray-500" />}
+                    {selectedOffer.mode === "Híbrido" && <Gpu className="w-4 h-4 text-gray-500" />}
+                    <p className="text-gray-600 text-sm">{selectedOffer.mode}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    {selectedOffer.employment_type === "Tiempo Completo" && <Clock2 className="w-4 h-4 text-gray-500" />}
+                    {selectedOffer.employment_type === "Medio Tiempo" && <ClockFading className="w-4 h-4 text-gray-500" />}
+                    <p className="text-gray-600 text-sm">{selectedOffer.employment_type}</p>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                    <Banknote  className="w-4 h-4 text-gray-500" />
+                    <p className="text-gray-600 text-sm">S/.{selectedOffer.salary_min} - S/.{selectedOffer.salary_max}</p>
+                </div>
+              </div>
+              <div className="border border-blue-900 rounded-xl p-4">
+                <h2 className="text-lg font-semibold text-blue-900">¿Qué buscamos?</h2>
+                 <ul className="list-disc list-inside">
+                  {selectedOffer.JobRequirements && selectedOffer.JobRequirements.length > 0 ? (
+                    selectedOffer.JobRequirements.map((req) => (
+                      <li key={req.id} className="text-gray-700 text-sm">
+                        {req.description}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-700 text-sm">No hay requisitos definidos</li>
+                  )}
+                </ul>
+
               </div>
 
-              <div>
-                <label className="c_input_label flex items-center mb-1 text-black py-1">
-                  <div className="text-sm">Permisos</div>
-                </label>
-                <CustomSelect
-                  value={form.permission}   
-                  onChange={(val) => handleChange("permission", val)}
-                  options={permissionOptions}
-                  className="w-full"
-                  styleMap={{
-                    "Selecciona el tipo de permiso": {
-                      classes: "bg-[#F2F2F2] text-black",
-                      icon: "text-black",
-                    },
-                    Administrador: {
-                      classes: "bg-green-500 text-white",
-                      icon: "text-white",
-                    },
-                    Editor: {
-                      classes: "bg-[#F2F2F2] text-black",
-                      icon: "text-black",
-                    },
-                    Usuario:{
-                      classes: "bg-[#F2F2F2] text-black",
-                      icon: "text-black",
-                    }
-                  }}
-                />
+              <div className="border border-blue-900 rounded-xl p-4">
+                <h2 className="text-lg font-semibold text-blue-900">¿Qué habilidades necesitamos?</h2>
+                <ul className="list-disc list-inside">
+                  {selectedOffer.JobSkill && selectedOffer.JobSkill.length > 0 ? (
+                    selectedOffer.JobSkill.map((skil) => (
+                      <li key={skil.id} className="text-gray-700 text-sm">
+                        {skil.skill}
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-gray-700 text-sm">No hay habilidades definidas</li>
+                  )}
+                </ul>
+
               </div>
+
+               <div className="border border-blue-900 rounded-xl p-4">
+                <h2 className="text-lg font-semibold text-blue-900">¿Qué ofrecemos?</h2>
+
+              </div>
+            
             </div>
 
-            <div className="flex justify-between p-6">
+            <div className="flex justify-center gap-2">
               <button
-                onClick={onClose}
-                className="w-full block p-2 bg-white text-center rounded-xl text-black font-bold mb-7 border border-black m-4"
+                onClick={""}
+                className="w-auto block p-6 px-12 bg-blue-900 text-center rounded-full text-white font-bold mb-7  m-2"
               >
-                Cancelar
+                Postularme
               </button>
               <button
-                onClick={handleSubmit}
-                className="w-full block p-2 bg-black text-center rounded-xl text-white font-bold mb-7 m-4"
+                onClick={""}
+                className=" p-2 px-6 bg-[#eaf3fb] text-center rounded-full text-white font-bold mb-7 m-2"
               >
-                Guardar
+                <Heart className="w-6 h-6 text-blue-900"/>
               </button>
             </div>
           </motion.div>
