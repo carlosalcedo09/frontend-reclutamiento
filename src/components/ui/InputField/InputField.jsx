@@ -3,7 +3,7 @@ import style from './InputField.module.scss';
 import EyeIcon from '@/components/icons/EyeIcon.svg';
 import OpenEyeIcon from '@/components/icons/OpenEyeIcon.svg';
 
-const InputField = ({ icon, type = 'text', name = 'another', className = '',label = '', labelColor = 'text-black', value,onChange }) => {
+const InputField = ({ icon, type = 'text', name = 'another', className = '',label = '', labelColor = 'text-black', value, onChange, required = false, }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -23,6 +23,7 @@ const InputField = ({ icon, type = 'text', name = 'another', className = '',labe
         className={`w-full bg-[#F2F2F2] py-[0.43rem] px-3 rounded-md ${type === 'password' ? 'pr-11' : ''}`}
         value={value}
         onChange={onChange}
+        required={required}
       />
 
       {type === 'password' && (

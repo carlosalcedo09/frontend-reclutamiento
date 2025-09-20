@@ -82,15 +82,15 @@ export default function NavbarApp() {
 						<DropdownMenu aria-label="Profile Actions" variant="flat">
 							{isLoggedIn ? (
 								<>
-									<DropdownItem key="profile" className="h-14 gap-2">
-										<p className="font-semibold">Signed in as</p>
+									<DropdownItem key="signed" className="h-14 gap-2">
+										<p className="font-semibold">Logueado como</p>
 										<p className="font-semibold">{userEmail}</p>
 									</DropdownItem>
-									<DropdownItem key="settings">
+									<DropdownItem key="profile">
 										<Link href="/usuario/">Mi perfil</Link>
 									</DropdownItem>
-									<DropdownItem key="settings">
-										<Link href="/usuario/">Mi CV</Link>
+									<DropdownItem key="cv">
+										<Link href="/usuario/cv">Mi CV</Link>
 									</DropdownItem>
 									<DropdownItem
 										key="logout"

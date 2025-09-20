@@ -19,6 +19,7 @@ module.exports = {
 				ivory: '#F9F7F3',
 				graphite: '#4B4B4B',
 				'dark-green': '#1E454F',
+				primary: '#003b99',
 			},
 		},
 	},
