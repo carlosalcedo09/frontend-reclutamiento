@@ -21,7 +21,6 @@ import api from '@/lib/axios';
 export default function CVExperiencia({ candidate, onExperienceAdded }) {
 	const [isOpen, setIsOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [experiences, setExperiences] = useState([]);
 
 	const [formData, setFormData] = useState({
 		company_name: '',
