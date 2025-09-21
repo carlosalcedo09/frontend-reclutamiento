@@ -1,37 +1,38 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Card, CardHeader, CardBody, Button, Avatar } from '@heroui/react';
 import api from '@/lib/axios';
+import CVResumen from './cvResume/CVResume';
+import CVExperiencia from './cvExperience/CVExperience';
+import CVEducacion from './cvEducation/CVEducation';
+import CVSkills from './cvSkills/CVSkills';
 
 export default function CVContent() {
 	const [cvData, setCvData] = useState(null);
-
+	const fetchData = async () => {
+		try {
+			const res = await api.get('/users/profile/');
+			setCvData(res.data);
+		} catch (error) {
+			console.error('Error al cargar el CV', error);
+		}
+	};
 	useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const res = await api.get('/users/profile/');
-				setCvData(res.data);
-			} catch (error) {
-				console.error('Error al cargar el CV', error);
-			}
-		};
 		fetchData();
 	}, []);
 
-	if (!cvData) {
-		return <p className="text-center mt-10 text-gray-500">Cargando CV...</p>;
-	}
+	if (!cvData) return <p className="text-center mt-10 text-gray-500">Cargando CV...</p>;
 
 	const candidate = cvData.candidate;
 
 	return (
 		<div className="max-w-[1440px] mx-auto px-6 py-10">
-			{/* Encabezado con nombre y datos principales */}
+			{/* Cabecera del candidato */}
 			<div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
-				<Avatar
-					className="w-32 h-32 rounded-full border-4 border-[#003b99]"
+				<img
 					src={candidate.photograph || '/avatar-placeholder.png'}
+					alt="Foto de perfil"
+					className="w-32 h-32 rounded-full border-4 border-[#003b99] object-cover"
 				/>
 				<div>
 					<h1 className="text-3xl font-bold text-[#003b99]">{candidate.name}</h1>
@@ -66,110 +67,18 @@ export default function CVContent() {
 				</div>
 			</div>
 
-			{/* Contenido en dos columnas */}
+			{/* Grid en dos columnas */}
 			<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 				{/* Columna izquierda */}
-				<div className="md:col-span-1 space-y-6">
-					<Card>
-						<CardHeader>
-							<h2 className="text-lg font-bold">Resumen</h2>
-						</CardHeader>
-						<CardBody>
-							<p>
-								<strong>Años de experiencia:</strong>{' '}
-								{candidate.experience_years || '0'}
-							</p>
-							<p>
-								<strong>Disponibilidad:</strong> {candidate.avaliability || '-'}
-							</p>
-							<p>
-								<strong>Recomendación:</strong>{' '}
-								{candidate.has_recommendation ? 'Sí' : 'No'}
-							</p>
-						</CardBody>
-					</Card>
+				<div className="space-y-6 md:col-span-1">
+					<CVResumen candidate={candidate} />
 				</div>
 
 				{/* Columna derecha */}
-				<div className="md:col-span-2 space-y-6">
-					<Card>
-						<CardHeader>
-							<h2 className="text-lg font-bold">Experiencia laboral</h2>
-						</CardHeader>
-						<CardBody>
-							{candidate.experiences?.length > 0 ? (
-								<ul className="space-y-3">
-									{candidate.experiences.map((exp) => (
-										<li key={exp.id}>
-											<p className="font-semibold">{exp.position}</p>
-											<p className="text-sm text-gray-600">
-												{exp.company_name} ({exp.start_date} -{' '}
-												{exp.end_date || 'Actual'})
-											</p>
-											<p className="text-sm">{exp.description}</p>
-										</li>
-									))}
-								</ul>
-							) : (
-								<p className="text-gray-500">No hay experiencias registradas.</p>
-							)}
-							<Button className="mt-4 bg-[#003b99] text-white">
-								Agregar experiencia
-							</Button>
-						</CardBody>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<h2 className="text-lg font-bold">Educación</h2>
-						</CardHeader>
-						<CardBody>
-							{candidate.educations?.length > 0 ? (
-								<ul className="space-y-3">
-									{candidate.educations.map((edu) => (
-										<li key={edu.id}>
-											<p className="font-semibold">{edu.degree}</p>
-											<p className="text-sm text-gray-600">
-												{edu.institution} ({edu.start_date} -{' '}
-												{edu.end_date || (edu.is_study ? 'En curso' : '')})
-											</p>
-											<p className="text-sm">{edu.description}</p>
-										</li>
-									))}
-								</ul>
-							) : (
-								<p className="text-gray-500">No hay estudios registrados.</p>
-							)}
-							<Button className="mt-4 bg-[#003b99] text-white">
-								Agregar educación
-							</Button>
-						</CardBody>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<h2 className="text-lg font-bold">Habilidades</h2>
-						</CardHeader>
-						<CardBody>
-							{candidate.skills?.length > 0 ? (
-								<ul className="flex flex-wrap gap-2">
-									{candidate.skills.map((skill) => (
-										<li
-											key={skill.id}
-											className="px-3 py-1 bg-gray-100 rounded-full text-sm border"
-										>
-											{skill.skill.name} (Nivel {skill.proficiency_level})
-										</li>
-									))}
-								</ul>
-							) : (
-								<p className="text-gray-500">No hay habilidades registradas.</p>
-							)}
-							<Button className="mt-4 bg-[#003b99] text-white">
-								Agregar habilidad
-							</Button>
-						</CardBody>
-					</Card>
+				<div className="space-y-6 md:col-span-2">
+					<CVSkills candidate={candidate} onSkillAdded={fetchData} />
+					<CVExperiencia candidate={candidate} onExperienceAdded={fetchData} />
+					<CVEducacion candidate={candidate} />
 				</div>
 			</div>
 		</div>
