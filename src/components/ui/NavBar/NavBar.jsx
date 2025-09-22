@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // 🔹 Importamos
 import {
@@ -19,12 +19,28 @@ import {
 } from '@heroui/react';
 import { User } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
+import api from '@/lib/axios';
 
 export default function NavbarApp() {
 	const { data: session, status } = useSession();
+	const [cvData, setCvData] = useState(null);
+
 	const pathname = usePathname(); 
 	const isLoggedIn = status === 'authenticated';
 	const userEmail = session?.user?.email;
+	const fetchData = async () => {
+		try {
+			const res = await api.get('/users/profile/');
+			setCvData(res.data);
+		} catch (error) {
+			console.error('Error al cargar el CV', error);
+		}
+	};
+	useEffect(() => {
+		if (isLoggedIn) {
+			fetchData();
+		}
+	}, [isLoggedIn]);
 
 	// 🔹 Definimos los links en un array
 	const menuItems = [
@@ -79,7 +95,10 @@ export default function NavbarApp() {
 									isBordered
 									as="button"
 									size="sm"
-									src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+									src={
+										cvData?.candidate?.photograph ||
+										'https://i.pravatar.cc/150?u=a042581f4e29026704d'
+									}
 								/>
 							) : (
 								<Avatar
