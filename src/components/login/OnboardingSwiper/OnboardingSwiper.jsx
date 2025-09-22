@@ -36,30 +36,30 @@ const OnboardingSwiper = ({ isHiddenOnMobile }) => {
 			>
 				<SwiperSlide>
 					<div className="slide">
-						<img src="https://s3.amazonaws.com/remanso.com.pe/wp-content/uploads/2023/03/25063547/hero-home.jpeg" className="object-cover" alt="ob-1" />
+						<img src="https://img.freepik.com/foto-gratis/mujer-tiro-completo-que-trabaja-escritorio_23-2150062343.jpg" className="object-cover" alt="ob-1" />
 						<div className="caption text-3xl xl:text-4xl font-semibold">
-							 Belleza, paz y grandes recuerdos en un solo lugar
+							 Explora oportunidades laborales en un solo lugar
 						</div>
 					</div>
 				</SwiperSlide>
 				<SwiperSlide>
 					<img
-						src="https://s3.amazonaws.com/remanso.com.pe/wp-content/uploads/2025/07/hero_banner-v2-scaled.webp"
+						src="https://img.freepik.com/fotos-premium/imagen-fondo-vertical-lugar-trabajo-minimo-oficina-casa-blanco-computadora-escritorio-madera-cop_236854-45032.jpg"
 						className="object-cover"
 						alt="ob-2"
 					/>
 					<div className="caption text-3xl xl:text-4xl font-semibold">
-						 Nuevos espacios exclusivos para el descanso eterno
+						 Postula en pocos pasos a tu trabajo deseado
 					</div>
 				</SwiperSlide>
 				<SwiperSlide>
 					<img
-						src="https://s3.amazonaws.com/remanso.com.pe/wp-content/uploads/2025/07/hero_banner_v3-scaled.webp"
+						src="https://thumbs.dreamstime.com/b/retrato-vertical-de-un-empleado-exitoso-la-oficina-del-hombre-en-el-lugar-trabajo-entrenador-negocios-o-mentor-posar-usar-camisa-309559826.jpg"
 						className="object-cover"
 						alt="ob-2"
 					/>
 					<div className="caption text-3xl xl:text-4xl font-semibold">
-						 Apoyo profesional y humano, desde el primer momento
+						Gestiona y controla tus postulaciones
 					</div>
 				</SwiperSlide>
 			</Swiper>
