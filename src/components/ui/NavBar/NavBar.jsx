@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation'; // 🔹 Importamos
 import {
 	Avatar,
 	Dropdown,
@@ -24,6 +25,7 @@ export default function NavbarApp() {
 	const { data: session, status } = useSession();
 	const [cvData, setCvData] = useState(null);
 
+	const pathname = usePathname(); 
 	const isLoggedIn = status === 'authenticated';
 	const userEmail = session?.user?.email;
 	const fetchData = async () => {
@@ -66,13 +68,23 @@ export default function NavbarApp() {
 
 			{/* Desktop Links + Avatar */}
 			<NavbarContent className="hidden md:flex gap-6" justify="end">
-				{menuItems.map((item) => (
-					<NavbarItem key={item.href}>
-						<Link href={item.href} className="text-white hover:underline">
-							{item.label}
-						</Link>
-					</NavbarItem>
-				))}
+				{menuItems.map((item) => {
+					const isActive = pathname === item.href;
+					return (
+						<NavbarItem key={item.href}>
+							<Link
+								href={item.href}
+								className={`px-3 py-1 rounded-full transition-colors ${
+									isActive
+										? 'bg-white/90 text-[#003b99] font-semibold' // Activo → fondo blanco
+										: 'text-white hover:bg-blue-800'
+								}`}
+							>
+								{item.label}
+							</Link>
+						</NavbarItem>
+					);
+				})}
 
 				{/* Avatar dinámico */}
 				<NavbarItem>
@@ -144,11 +156,23 @@ export default function NavbarApp() {
 				<NavbarMenuToggle />
 			</div>
 			<NavbarMenu className="md:hidden">
-				{menuItems.map((item) => (
-					<NavbarMenuItem key={item.href}>
-						<Link href={item.href}>{item.label}</Link>
-					</NavbarMenuItem>
-				))}
+				{menuItems.map((item) => {
+					const isActive = pathname === item.href;
+					return (
+						<NavbarMenuItem key={item.href}>
+							<Link
+								href={item.href}
+								className={`block px-3 py-2 rounded-full ${
+									isActive
+										? 'bg-white text-[#003b99] font-semibold rounded-full'
+										: 'text-white hover:bg-blue-800'
+								}`}
+							>
+								{item.label}
+							</Link>
+						</NavbarMenuItem>
+					);
+				})}
 			</NavbarMenu>
 		</Navbar>
 	);
