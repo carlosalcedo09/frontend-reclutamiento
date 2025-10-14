@@ -6,23 +6,23 @@ export default function CVResumen({ candidate }) {
 	return (
 		<Card>
 			<CardHeader>
-				<h2 className="text-lg font-bold">Resumen profesional</h2>
+				<h2 className="mt-2 mx-2 text-lg font-bold">Resumen profesional</h2>
 			</CardHeader>
 			<CardBody>
-				<p className='my-2'>
+				<p className="m-2">
 					<strong>Biografía:</strong> {candidate.short_bio || 'No registrada'}
 				</p>
-				<p className='my-2'>
+				<p className="m-2">
 					<strong>Años de experiencia:</strong> {candidate.experience_years || '0'}
 				</p>
-				<p className='my-2'>
+				<p className="m-2">
 					<strong>Disponibilidad:</strong> {candidate.avaliability || '-'}
 				</p>
-				<p className='my-2'>
+				<p className="m-2">
 					<strong>Recomendación:</strong> {candidate.has_recommendation ? 'Sí' : 'No'}
 				</p>
 
-				<div className="flex gap-4 mt-2">
+				<div className="flex gap-4 m-2">
 					{candidate.linkedin_url && (
 						<a href={candidate.linkedin_url} target="_blank" className="text-blue-600">
 							LinkedIn
@@ -34,8 +34,6 @@ export default function CVResumen({ candidate }) {
 						</a>
 					)}
 				</div>
-
-				<Button className="mt-4 bg-[#003b99] text-white">Editar</Button>
 			</CardBody>
 		</Card>
 	);

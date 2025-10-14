@@ -156,7 +156,7 @@ export default function PerfilContent() {
 							</div>
 							<div>
 								<p className="text-sm text-gray-500">Disponibilidad</p>
-								<p className="font-semibold">{candidate?.avaliability || '-'}</p>
+								<p className="font-semibold">{candidate?.availability || '-'}</p>
 							</div>
 							<div>
 								<p className="text-sm text-gray-500">Biografía</p>
@@ -183,6 +183,21 @@ export default function PerfilContent() {
 								>
 									{candidate?.portfolio_url || '-'}
 								</a>
+							</div>
+							<div>
+								<p className="text-sm text-gray-500">Currículum (CV)</p>
+								{candidate?.cv_file ? (
+									<a
+										href={candidate.cv_file}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="font-semibold text-blue-600 hover:underline"
+									>
+										Ver archivo
+									</a>
+								) : (
+									<p className="font-semibold text-gray-400">No cargado</p>
+								)}
 							</div>
 						</CardBody>
 					</Card>

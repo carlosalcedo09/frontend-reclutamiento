@@ -2,40 +2,51 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Mail, Lock, User } from 'lucide-react';
+import { Lock, User } from 'lucide-react';
 import InputField from '@/components/ui/InputField';
 import OnboardingSwiper from '@/components/login/OnboardingSwiper';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { toast } from 'react-toastify';
 
 const LoginContent = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [error, setError] = useState('');
+	const [loading, setLoading] = useState(false);
 
 	const router = useRouter();
 
 	const login = async (e) => {
 		e.preventDefault();
-		const res = await signIn('credentials', {
-			redirect: false,
-			username,
-			password,
-		});
-		if (res.error) {
-			setError('Usuario o contraseña inválidos');
-		} else {
-			router.push('/');
+		setLoading(true);
+
+		try {
+			const res = await signIn('credentials', {
+				redirect: false,
+				username,
+				password,
+			});
+
+			if (res.error) {
+				toast.error('Usuario o contraseña inválidos');
+			} else {
+				toast.success('Inicio de sesión exitoso');
+				router.push('/');
+			}
+		} catch (error) {
+			console.error('Error en login:', error);
+			toast.error('⚠️ No se pudo iniciar sesión. Inténtalo más tarde.');
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	return (
 		<section className="flex min-h-screen scrollbar-hide bg-gray-50">
 			{/* Lado Izquierdo - Onboarding / Imagen */}
-
 			<OnboardingSwiper isHiddenOnMobile={true} />
 
-			{/* Lado Derecho - Login (sin card, full height/width) */}
+			{/* Lado Derecho - Login */}
 			<div className="w-full lg:w-1/2 flex justify-center items-center bg-gray-50">
 				<div className="p-12 w-full max-w-[500px]">
 					{/* Títulos */}
@@ -62,6 +73,7 @@ const LoginContent = () => {
 							label="Contraseña"
 							icon={<Lock className="w-5 h-5 mr-2 text-gray-500" />}
 						/>
+
 						<div className="text-sm text-right text-blue-600 font-medium hover:underline cursor-pointer">
 							¿Olvidaste tu contraseña?
 						</div>
@@ -70,9 +82,12 @@ const LoginContent = () => {
 						<button
 							type="button"
 							onClick={login}
-							className="w-full py-3 bg-[#003b99] hover:bg-[#002a6e] text-white font-semibold rounded-xl transition-colors"
+							disabled={loading}
+							className={`w-full py-3 ${
+								loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#003b99] hover:bg-[#002a6e]'
+							} text-white font-semibold rounded-xl transition-colors`}
 						>
-							Iniciar Sesión
+							{loading ? 'Ingresando...' : 'Iniciar Sesión'}
 						</button>
 
 						{/* Registro */}

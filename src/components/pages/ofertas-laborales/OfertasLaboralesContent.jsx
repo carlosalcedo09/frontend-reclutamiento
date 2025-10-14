@@ -109,7 +109,7 @@ export default function OfertaLaboralesPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 py-12 px-4 sm:px-6 lg:px-12 w-full max-w-7xl">
         <Filters filters={filters} handleFilterClick={handleFilterClick} />
 
-        <div className="lg:col-span-3 grid grid-cols-1 gap-6">
+        <div className="lg:col-span-3 grid grid-cols-1 gap-6 max-h-7">
           {filtered.map((job) => (
             <JobCard
               key={job.id}

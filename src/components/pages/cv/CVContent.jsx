@@ -6,6 +6,7 @@ import CVResumen from './cvResume/CVResume';
 import CVExperiencia from './cvExperience/CVExperience';
 import CVEducacion from './cvEducation/CVEducation';
 import CVSkills from './cvSkills/CVSkills';
+import CVCertificates from './cvCertificates/cvCertifcates';
 import {
 	Button,
 	Input,
@@ -17,6 +18,15 @@ import {
 	Spinner,
 } from '@heroui/react';
 import { toast } from 'react-toastify';
+import {
+	User,
+	MapPin,
+	GraduationCap,
+	Calendar,
+	Globe,
+	Briefcase,
+	Image as ImageIcon,
+} from 'lucide-react';
 
 export default function CVContent() {
 	const [cvData, setCvData] = useState(null);
@@ -32,6 +42,7 @@ export default function CVContent() {
 			console.error('Error al cargar el CV', error);
 		}
 	};
+
 	useEffect(() => {
 		fetchData();
 	}, []);
@@ -39,6 +50,7 @@ export default function CVContent() {
 	if (!cvData) return <p className="text-center mt-10 text-gray-500">Cargando CV...</p>;
 
 	const candidate = cvData.candidate;
+
 	const handleSavePhoto = async () => {
 		if (!selectedFile) {
 			toast.error('Selecciona una imagen primero');
@@ -49,7 +61,6 @@ export default function CVContent() {
 			const formData = new FormData();
 			formData.append('photograph', selectedFile);
 
-			// reutilizamos tu endpoint PATCH
 			await api.patch('/candidates/update-profile/', formData, {
 				headers: { 'Content-Type': 'multipart/form-data' },
 			});
@@ -57,7 +68,7 @@ export default function CVContent() {
 			toast.success('Foto actualizada correctamente');
 			setIsModalOpen(false);
 			setSelectedFile(null);
-			fetchData(); // refrescar la data
+			fetchData();
 		} catch (error) {
 			console.error(error);
 			toast.error('Error al actualizar la foto');
@@ -70,47 +81,67 @@ export default function CVContent() {
 		<div className="max-w-[1440px] mx-auto px-6 py-10">
 			{/* Cabecera del candidato */}
 			<div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
-				<div className="relative">
-					<img
-						src={candidate.photograph || '/avatar-placeholder.png'}
-						alt="Foto de perfil"
-						className="w-32 h-32 rounded-full border-4 border-[#003b99] object-cover cursor-pointer"
+				<div className="relative flex flex-col items-center">
+					<div
+						className="relative group cursor-pointer"
 						onClick={() => setIsModalOpen(true)}
-					/>
-					<p className="text-xs text-center text-gray-500 mt-2">Haz click para cambiar</p>
+					>
+						<img
+							src={candidate.photograph || '/avatar-placeholder.png'}
+							alt="Foto de perfil"
+							className="w-32 h-32 rounded-full border-4 border-[#003b99] object-cover"
+						/>
+						<div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+							<ImageIcon className="w-6 h-6 text-white" />
+						</div>
+					</div>
+					<p className="text-xs text-gray-500 mt-2">Haz click para cambiar</p>
 				</div>
+
 				<div>
-					<h1 className="text-3xl font-bold text-[#003b99]">{candidate.name}</h1>
+					<h1 className="text-3xl font-bold text-[#003b99] flex items-center gap-2">
+						<User className="w-7 h-7 text-[#003b99]" /> {candidate.name}
+					</h1>
 					<p className="text-gray-600 mt-2">
 						{candidate.short_bio || 'Biografía no registrada'}
 					</p>
-					<div className="flex gap-6 mt-4 text-sm text-gray-700">
-						<span>📍 {candidate.location || 'Ubicación no registrada'}</span>
-						<span>🎓 {candidate.education_level || 'Educación no registrada'}</span>
-						<span>📅 {candidate.birth_date}</span>
+					<div className="flex flex-wrap gap-6 mt-4 text-sm text-gray-700">
+						<span className="flex items-center gap-1">
+							<MapPin className="w-4 h-4 text-gray-500" />
+							{candidate.location || 'Ubicación no registrada'}
+						</span>
+						<span className="flex items-center gap-1">
+							<GraduationCap className="w-4 h-4 text-gray-500" />
+							{candidate.education_level || 'Educación no registrada'}
+						</span>
+						<span className="flex items-center gap-1">
+							<Calendar className="w-4 h-4 text-gray-500" />
+							{candidate.birth_date || 'Fecha no registrada'}
+						</span>
 					</div>
 					<div className="flex gap-4 mt-3">
 						{candidate.linkedin_url && (
 							<a
 								href={candidate.linkedin_url}
 								target="_blank"
-								className="text-blue-600 underline"
+								className="flex items-center gap-1 text-blue-600 underline"
 							>
-								LinkedIn
+								<Globe className="w-4 h-4" /> LinkedIn
 							</a>
 						)}
 						{candidate.portfolio_url && (
 							<a
 								href={candidate.portfolio_url}
 								target="_blank"
-								className="text-blue-600 underline"
+								className="flex items-center gap-1 text-blue-600 underline"
 							>
-								Portafolio
+								<Briefcase className="w-4 h-4" /> Portafolio
 							</a>
 						)}
 					</div>
 				</div>
 			</div>
+
 			{/* Modal para editar foto */}
 			<Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
 				<ModalContent>
@@ -152,13 +183,14 @@ export default function CVContent() {
 				{/* Columna izquierda */}
 				<div className="space-y-6 md:col-span-1">
 					<CVResumen candidate={candidate} />
+					<CVSkills candidate={candidate} onSkillAdded={fetchData} />
 				</div>
 
 				{/* Columna derecha */}
 				<div className="space-y-6 md:col-span-2">
-					<CVSkills candidate={candidate} onSkillAdded={fetchData} />
-					<CVExperiencia candidate={candidate} onExperienceAdded={fetchData} />
 					<CVEducacion candidate={candidate} onEducationAdded={fetchData} />
+					<CVExperiencia candidate={candidate} onExperienceAdded={fetchData} />
+					<CVCertificates candidate={candidate} onCertificateAdded={fetchData} />
 				</div>
 			</div>
 		</div>

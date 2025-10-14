@@ -18,9 +18,9 @@ import { toast } from 'react-toastify';
 
 export default function EditProfesional({ isOpen, onClose, candidate, onSave }) {
 	const educationLevels = [
-		{ code: 'Secundaria', name: 'Secundaria' },
-		{ code: 'Técnico', name: 'Técnico' },
-		{ code: 'Licenciatura', name: 'Licenciatura' },
+		{ code: 'Bachiller', name: 'Bachiller' },
+		{ code: 'Especialidad', name: 'Especialidad' },
+		{ code: 'Diplomado', name: 'Diplomado' },
 		{ code: 'Maestría', name: 'Maestría' },
 		{ code: 'Doctorado', name: 'Doctorado' },
 	];
@@ -32,11 +32,13 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 	const [formData, setFormData] = useState({
 		education_level: '',
 		experience_years: '',
-		avaliability: '',
+		availability: '',
 		short_bio: '',
 		linkedin_url: '',
 		portfolio_url: '',
 	});
+	const [cvFile, setCvFile] = useState(null); // 🆕 nuevo estado para archivo
+
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -44,7 +46,7 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 			setFormData({
 				education_level: candidate.education_level || '',
 				experience_years: candidate.experience_years || '',
-				avaliability: candidate.avaliability || '',
+				availability: candidate.availability || '',
 				short_bio: candidate.short_bio || '',
 				linkedin_url: candidate.linkedin_url || '',
 				portfolio_url: candidate.portfolio_url || '',
@@ -59,9 +61,25 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 	const handleSave = async () => {
 		setLoading(true);
 		try {
-			const response = await api.patch('/candidates/update-profile/', formData);
+			const payload = new FormData(); // 🆕 usamos FormData
+			for (const key in formData) {
+				if (formData[key] !== undefined && formData[key] !== null) {
+					payload.append(key, formData[key]);
+				}
+			}
+
+			if (cvFile) {
+				payload.append('cv_file', cvFile); // 🆕 subimos el archivo
+			}
+
+			const response = await api.patch('/candidates/update-profile/', payload, {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			});
+
 			toast.success('Datos profesionales actualizados correctamente');
-			onSave(response.data); // Actualiza el estado del perfil en PerfilContent
+			onSave(response.data); // actualizar vista del perfil
 			onClose();
 		} catch (error) {
 			console.error(error);
@@ -70,7 +88,7 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 			setLoading(false);
 		}
 	};
-
+	
 	return (
 		<Modal isOpen={isOpen} onOpenChange={onClose}>
 			<ModalContent>
@@ -96,9 +114,9 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 
 					<Select
 						label="Disponibilidad"
-						selectedKeys={[formData.avaliability]}
+						selectedKeys={[formData.availability]}
 						onSelectionChange={(keys) =>
-							handleChange('avaliability', Array.from(keys)[0])
+							handleChange('availability', Array.from(keys)[0])
 						}
 					>
 						{jobTypes.map((j) => (
@@ -121,6 +139,28 @@ export default function EditProfesional({ isOpen, onClose, candidate, onSave }) 
 						value={formData.portfolio_url}
 						onValueChange={(val) => handleChange('portfolio_url', val)}
 					/>
+					{/* 🆕 Campo de subida de archivo */}
+					<div className="flex flex-col gap-2 mt-2">
+						<label className="text-sm text-gray-600 font-medium">
+							Subir CV (PDF o Word)
+						</label>
+						<input
+							type="file"
+							accept=".pdf,.doc,.docx"
+							onChange={(e) => setCvFile(e.target.files[0])}
+							className="border border-gray-300 rounded-lg p-2 text-sm"
+						/>
+						{candidate?.cv_file && (
+							<a
+								href={candidate.cv_file}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="text-blue-600 text-sm hover:underline"
+							>
+								Ver CV actual
+							</a>
+						)}
+					</div>
 				</ModalBody>
 				<ModalFooter className="flex items-center gap-2">
 					<Button variant="flat" onPress={onClose}>

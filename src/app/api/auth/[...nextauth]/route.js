@@ -56,19 +56,20 @@ export const authOptions = {
 			// 🔄 Refresh automático
 			if (Date.now() > token.accessExpires) {
 				try {
-					const res = await axios.post(`${API_URL}/login/refresh/`, {
+					const res = await axios.post(`http://127.0.0.1:8000/api/token/refresh/`, {
 						refresh: token.refresh,
 					});
 					token.access = res.data.access;
 					token.accessExpires = Date.now() + 60 * 60 * 1000;
 				} catch (e) {
-					return null; // refresh falló → cerrar sesión
+					return { ...token, error: 'RefreshAccessTokenError' };
 				}
 			}
 
 			return token;
 		},
 		async session({ session, token }) {
+			if (!token) return null;
 			session.user = {
 				id: token.id,
 				username: token.username,

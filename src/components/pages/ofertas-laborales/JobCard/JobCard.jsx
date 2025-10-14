@@ -38,7 +38,7 @@ export default function JobCard({ ofert, isLoggedIn, setModalConfirmContent, set
             }
 
              try {
-                  const res = await api.post("/jobaplications/", {
+                  const res = await api.post("/jobapplications/", {
                     joboffers_id: ofert.id, 
                   });
 
