@@ -92,38 +92,45 @@ export default function CVSkills({ candidate, onSkillAdded }) {
 	};
 
 	return (
-		<Card>
+		<Card className='h-64'>
 			<CardHeader>
 				<h2 className="text-lg font-bold">Habilidades</h2>
 			</CardHeader>
 			<CardBody>
 				{candidate.skills?.length > 0 ? (
-					<ul className="flex flex-wrap gap-2">
-						{candidate.skills.map((skill) => (
-							<li
-								key={skill.id}
-								className="px-3 py-1 bg-gray-100 rounded-full text-sm border flex gap-2 items-center"
-							>
-								<span>
-									{skill.skill_name} (Nivel {skill.proficiency_label})
-								</span>
-								<Button
-									isIconOnly
-									size="sm"
-									variant="light"
-									className="text-blue-600"
-									onPress={() => handleOpen(skill)}
+					<div className="relative max-h-48 overflow-y-auto rounded-lg scrollbar-custom">
+						<ul className="flex flex-wrap gap-2">
+							{candidate.skills.map((skill) => (
+								<li
+									key={skill.id}
+									className="px-3 py-1 bg-gray-100 rounded-full text-sm border flex gap-2 items-center"
 								>
-									<Edit3 className="w-4 h-4" />
-								</Button>
-							</li>
-						))}
-					</ul>
+									<span>
+										{skill.skill_name} (Nivel {skill.proficiency_label})
+									</span>
+									<Button
+										isIconOnly
+										size="sm"
+										variant="light"
+										className="text-blue-600"
+										onPress={() => handleOpen(skill)}
+									>
+										<Edit3 className="w-4 h-4" />
+									</Button>
+								</li>
+							))}
+						</ul>
+
+						{/* efecto blur inferior si hay más de 5 habilidades */}
+						{candidate.skills.length > 4 && (
+							<div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-t pointer-events-none" />
+						)}
+					</div>
 				) : (
 					<p className="text-gray-500">No hay habilidades registradas.</p>
 				)}
 
-				<Button className="mt-4 bg-[#003b99] text-white" onPress={() => handleOpen()}>
+				<Button className="h-full max-h-full mt-4 bg-[#003b99] text-white" onPress={() => handleOpen()}>
 					Agregar habilidad
 				</Button>
 			</CardBody>

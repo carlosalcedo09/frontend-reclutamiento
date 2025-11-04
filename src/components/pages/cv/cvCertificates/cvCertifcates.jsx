@@ -14,15 +14,7 @@ import {
 	Input,
 	Spinner,
 } from '@heroui/react';
-import {
-	Edit3,
-	FileText,
-	Building2,
-	Hash,
-	Calendar,
-	Clock,
-	FileDown,
-} from 'lucide-react'; // 👈 Agregamos íconos
+import { Edit3, FileText, Building2, Hash, Calendar, Clock, FileDown } from 'lucide-react'; // 👈 Agregamos íconos
 import api from '@/lib/axios';
 import { toast } from 'react-toastify';
 
@@ -120,65 +112,68 @@ export default function CVCertificates({ candidate, onCertificateAdded }) {
 			</CardHeader>
 			<CardBody>
 				{candidate.certificates?.length > 0 ? (
-					<ul className="space-y-2">
-						{candidate.certificates.map((cert) => (
-							<li
-								key={cert.id}
-								className="p-3 border rounded-md bg-gray-50 text-sm flex justify-between items-center"
-							>
-								<div className="flex flex-col gap-1">
-									<span className="font-semibold flex items-center gap-2">
-										<FileText className="w-4 h-4 text-[#003b99]" />
-										{cert.name}
-									</span>
-									<span className="text-gray-600 text-xs flex items-center gap-2">
-										<Building2 className="w-3 h-3" /> {cert.institution}
-										{cert.code && (
-											<>
-												<Hash className="w-3 h-3" /> Código: {cert.code}
-											</>
-										)}
-									</span>
-									<span className="text-gray-500 text-xs flex items-center gap-2">
-										<Calendar className="w-3 h-3" />
-										Obtenido: {cert.date_obtained || '—'}
-										{cert.expiration_date && (
-											<>
-												<Clock className="w-3 h-3" /> Expira: {cert.expiration_date}
-											</>
-										)}
-									</span>
-									{cert.certificate_file && (
-										<a
-											href={cert.certificate_file}
-											target="_blank"
-											className="text-blue-600 text-xs underline mt-1 flex items-center gap-1"
-										>
-											<FileDown className="w-3 h-3" />
-											Ver archivo
-										</a>
-									)}
-								</div>
-								<Button
-									isIconOnly
-									size="sm"
-									variant="light"
-									className="text-blue-600"
-									onPress={() => handleOpen(cert)}
+					<div className="relative max-h-48 overflow-y-auto rounded-lg scrollbar-custom">
+						<ul className="space-y-2">
+							{candidate.certificates.map((cert) => (
+								<li
+									key={cert.id}
+									className="p-3 border rounded-md bg-gray-50 text-sm flex justify-between items-center"
 								>
-									<Edit3 className="w-4 h-4" />
-								</Button>
-							</li>
-						))}
-					</ul>
+									<div className="flex flex-col gap-1">
+										<span className="font-semibold flex items-center gap-2">
+											<FileText className="w-4 h-4 text-[#003b99]" />
+											{cert.name}
+										</span>
+										<span className="text-gray-600 text-xs flex items-center gap-2">
+											<Building2 className="w-3 h-3" /> {cert.institution}
+											{cert.code && (
+												<>
+													<Hash className="w-3 h-3" /> Código: {cert.code}
+												</>
+											)}
+										</span>
+										<span className="text-gray-500 text-xs flex items-center gap-2">
+											<Calendar className="w-3 h-3" />
+											Obtenido: {cert.date_obtained || '—'}
+											{cert.expiration_date && (
+												<>
+													<Clock className="w-3 h-3" /> Expira:{' '}
+													{cert.expiration_date}
+												</>
+											)}
+										</span>
+										{cert.certificate_file && (
+											<a
+												href={cert.certificate_file}
+												target="_blank"
+												className="text-blue-600 text-xs underline mt-1 flex items-center gap-1"
+											>
+												<FileDown className="w-3 h-3" />
+												Ver archivo
+											</a>
+										)}
+									</div>
+									<Button
+										isIconOnly
+										size="sm"
+										variant="light"
+										className="text-blue-600"
+										onPress={() => handleOpen(cert)}
+									>
+										<Edit3 className="w-4 h-4" />
+									</Button>
+								</li>
+							))}
+						</ul>
+						{candidate.certificates.length > 4 && (
+							<div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-t pointer-events-none" />
+						)}
+					</div>
 				) : (
 					<p className="text-gray-500">No hay certificados registrados.</p>
 				)}
 
-				<Button
-					className="mt-4 bg-[#003b99] text-white"
-					onPress={() => handleOpen()}
-				>
+				<Button className="mt-4 bg-[#003b99] text-white" onPress={() => handleOpen()}>
 					Agregar certificado
 				</Button>
 			</CardBody>

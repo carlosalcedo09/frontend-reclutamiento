@@ -9,9 +9,16 @@ export default function CVResumen({ candidate }) {
 				<h2 className="mt-2 mx-2 text-lg font-bold">Resumen profesional</h2>
 			</CardHeader>
 			<CardBody>
-				<p className="m-2">
-					<strong>Biografía:</strong> {candidate.short_bio || 'No registrada'}
-				</p>
+				<div className="relative max-h-32 overflow-y-auto rounded-md scrollbar-custom px-2 py-1 scrollbar-custom ">
+					<p className="text-gray-700">
+						<strong>Biografía:</strong> {candidate.short_bio || 'No registrada'}
+					</p>
+
+					{/* Efecto fade/blur inferior cuando hay overflow */}
+					{candidate.short_bio && candidate.short_bio.length > 200 && (
+						<div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t" />
+					)}
+				</div>
 				<p className="m-2">
 					<strong>Años de experiencia:</strong> {candidate.experience_years || '0'}
 				</p>

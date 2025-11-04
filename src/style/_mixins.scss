@@ -21,5 +21,49 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100;200;300;400;500;600;700&display=swap');
 
 body {
-  font-family: 'DM Sans', sans-serif;
+	font-family: 'DM Sans', sans-serif;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+	width: 8px; /* ancho */
+	height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+	background: rgba(100, 100, 100, 0.3); /* color del “thumb” */
+	border-radius: 8px; /* bordes redondeados */
+	transition: background 0.3s ease;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 100, 100, 0.5);
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+	background: transparent; /* pista */
+}
+
+/* Soporte Firefox */
+.scrollbar-custom {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(100, 100, 100, 0.4) transparent;
+}
+
+/* 🌙 Modo oscuro */
+.dark .scrollbar-custom::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.25);
+}
+.dark .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.45);
+}
+.dark .scrollbar-custom {
+	scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Edge */
+}
+.scrollbar-hide {
+	-ms-overflow-style: none; /* IE y Edge */
+	scrollbar-width: none; /* Firefox */
 }

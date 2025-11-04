@@ -81,7 +81,7 @@ export default function CVContent() {
 		<div className="max-w-[1440px] mx-auto px-6 py-10">
 			{/* Cabecera del candidato */}
 			<div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-10">
-				<div className="relative flex flex-col items-center">
+				<div className="relative flex flex-col items-center w-full">
 					<div
 						className="relative group cursor-pointer"
 						onClick={() => setIsModalOpen(true)}

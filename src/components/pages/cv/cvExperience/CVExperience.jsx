@@ -60,11 +60,9 @@ export default function CVExperiencia({ candidate, onExperienceAdded }) {
 		setLoading(true);
 		try {
 			if (formData.id) {
-				// 🔧 Editar experiencia
 				await api.post('/experiences/update-experience/', formData);
 				toast.success('Experiencia actualizada');
 			} else {
-				// 🆕 Crear experiencia
 				await api.post('/experiences/add-experience/', formData);
 				toast.success('Experiencia agregada');
 			}
@@ -92,43 +90,48 @@ export default function CVExperiencia({ candidate, onExperienceAdded }) {
 			</CardHeader>
 			<CardBody>
 				{candidate.experiences?.length > 0 ? (
-					<ul className="space-y-3">
-						{candidate.experiences.map((exp) => (
-							<li
-								key={exp.id}
-								className="flex justify-between items-start p-3 border rounded-md bg-gray-50"
-							>
-								<div className="flex flex-col text-sm">
-									<span className="font-semibold flex items-center gap-2 ">
-										<Briefcase className="w-4 h-4" />
-										{exp.position}
-									</span>
-									<span className="text-gray-600 flex items-center gap-2 text-xs">
-										<Building2 className="w-3 h-3" />
-										{exp.company_name}
-									</span>
-									<span className="text-gray-500 flex items-center gap-2 text-xs">
-										<Calendar className="w-3 h-3" />
-										{exp.start_date} - {exp.end_date || 'Actual'}
-									</span>
-									{exp.description && (
-										<p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
-											<FileText className="w-3 h-3" /> {exp.description}
-										</p>
-									)}
-								</div>
-								<Button
-									isIconOnly
-									size="sm"
-									variant="light"
-									className="text-blue-600"
-									onPress={() => handleOpen(exp)}
+					<div className="relative max-h-48 overflow-y-auto rounded-lg scrollbar-custom">
+						<ul className="space-y-3">
+							{candidate.experiences.map((exp) => (
+								<li
+									key={exp.id}
+									className="flex justify-between items-start p-3 border rounded-md bg-gray-50"
 								>
-									<Edit3 className="w-4 h-4" />
-								</Button>
-							</li>
-						))}
-					</ul>
+									<div className="flex flex-col text-sm">
+										<span className="font-semibold flex items-center gap-2 ">
+											<Briefcase className="w-4 h-4" />
+											{exp.position}
+										</span>
+										<span className="text-gray-600 flex items-center gap-2 text-xs">
+											<Building2 className="w-3 h-3" />
+											{exp.company_name}
+										</span>
+										<span className="text-gray-500 flex items-center gap-2 text-xs">
+											<Calendar className="w-3 h-3" />
+											{exp.start_date} - {exp.end_date || 'Actual'}
+										</span>
+										{exp.description && (
+											<p className="text-xs text-gray-500 mt-1 flex items-center gap-1">
+												<FileText className="w-3 h-3" /> {exp.description}
+											</p>
+										)}
+									</div>
+									<Button
+										isIconOnly
+										size="sm"
+										variant="light"
+										className="text-blue-600"
+										onPress={() => handleOpen(exp)}
+									>
+										<Edit3 className="w-4 h-4" />
+									</Button>
+								</li>
+							))}
+						</ul>
+						{candidate.experiences.length > 4 && (
+							<div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-t pointer-events-none" />
+						)}
+					</div>
 				) : (
 					<p className="text-gray-500">No hay experiencias registradas.</p>
 				)}

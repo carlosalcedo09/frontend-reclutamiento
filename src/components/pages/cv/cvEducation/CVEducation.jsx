@@ -18,14 +18,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { parseDate } from '@internationalized/date';
-import {
-	Edit3,
-	GraduationCap,
-	Building2,
-	BookOpen,
-	Calendar,
-	FileText,
-} from 'lucide-react'; // 👈 íconos para educación
+import { Edit3, GraduationCap, Building2, BookOpen, Calendar, FileText } from 'lucide-react'; // 👈 íconos para educación
 import api from '@/lib/axios';
 
 export default function CVEducacion({ candidate, onEducationAdded }) {
@@ -106,48 +99,54 @@ export default function CVEducacion({ candidate, onEducationAdded }) {
 			</CardHeader>
 			<CardBody>
 				{candidate.educations?.length > 0 ? (
-					<ul className="space-y-3">
-						{candidate.educations.map((edu) => (
-							<li
-								key={edu.id}
-								className="flex justify-between items-start p-3 border rounded-md bg-gray-50"
-							>
-								<div className="flex flex-col text-sm">
-									<span className="font-semibold flex items-center gap-2 ">
-										<FileText className="w-4 h-4" />
-										{edu.degree}
-									</span>
-									<span className="text-gray-600 flex items-center gap-2 text-xs">
-										<Building2 className="w-3 h-3" />
-										{edu.institution}
-									</span>
-									<span className="text-gray-600 flex items-center gap-2 text-xs">
-										<BookOpen className="w-3 h-3" />
-										{edu.field_of_study}
-									</span>
-									<span className="text-gray-500 flex items-center gap-2 text-xs">
-										<Calendar className="w-3 h-3" />
-										{edu.start_date} -{' '}
-										{edu.end_date || (edu.is_study ? 'En curso' : 'Finalizado')}
-									</span>
-									{edu.description && (
-										<p className="text-xs text-gray-500 mt-1">
-											{edu.description}
-										</p>
-									)}
-								</div>
-								<Button
-									isIconOnly
-									size="sm"
-									variant="light"
-									className="text-blue-600"
-									onPress={() => handleOpen(edu)}
+					<div className="relative max-h-48 overflow-y-auto rounded-lg scrollbar-custom">
+						<ul className="space-y-3">
+							{candidate.educations.map((edu) => (
+								<li
+									key={edu.id}
+									className="flex justify-between items-start p-3 border rounded-md bg-gray-50"
 								>
-									<Edit3 className="w-4 h-4" />
-								</Button>
-							</li>
-						))}
-					</ul>
+									<div className="flex flex-col text-sm">
+										<span className="font-semibold flex items-center gap-2 ">
+											<FileText className="w-4 h-4" />
+											{edu.degree}
+										</span>
+										<span className="text-gray-600 flex items-center gap-2 text-xs">
+											<Building2 className="w-3 h-3" />
+											{edu.institution}
+										</span>
+										<span className="text-gray-600 flex items-center gap-2 text-xs">
+											<BookOpen className="w-3 h-3" />
+											{edu.field_of_study}
+										</span>
+										<span className="text-gray-500 flex items-center gap-2 text-xs">
+											<Calendar className="w-3 h-3" />
+											{edu.start_date} -{' '}
+											{edu.end_date ||
+												(edu.is_study ? 'En curso' : 'Finalizado')}
+										</span>
+										{edu.description && (
+											<p className="text-xs text-gray-500 mt-1">
+												{edu.description}
+											</p>
+										)}
+									</div>
+									<Button
+										isIconOnly
+										size="sm"
+										variant="light"
+										className="text-blue-600"
+										onPress={() => handleOpen(edu)}
+									>
+										<Edit3 className="w-4 h-4" />
+									</Button>
+								</li>
+							))}
+						</ul>
+						{candidate.educations.length > 4 && (
+							<div className="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-t pointer-events-none" />
+						)}
+					</div>
 				) : (
 					<p className="text-gray-500">No hay estudios registrados.</p>
 				)}
@@ -167,7 +166,9 @@ export default function CVEducacion({ candidate, onEducationAdded }) {
 							label="Institución"
 							type="text"
 							value={formData.institution}
-							onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
+							onChange={(e) =>
+								setFormData({ ...formData, institution: e.target.value })
+							}
 							startContent={<Building2 className="w-4 h-4 text-gray-500" />}
 						/>
 						<Input

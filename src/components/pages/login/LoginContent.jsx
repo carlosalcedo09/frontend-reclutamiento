@@ -8,12 +8,13 @@ import OnboardingSwiper from '@/components/login/OnboardingSwiper';
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { toast } from 'react-toastify';
+import ForgotPasswordModal from './ForgotPassword/ForgosPassword';
 
 const LoginContent = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
-
+	const [isForgotOpen, setForgotOpen] = useState(false);
 	const router = useRouter();
 
 	const login = async (e) => {
@@ -35,7 +36,7 @@ const LoginContent = () => {
 			}
 		} catch (error) {
 			console.error('Error en login:', error);
-			toast.error('⚠️ No se pudo iniciar sesión. Inténtalo más tarde.');
+			toast.error('⚠️ No se pudo iniciar sesión. Verifique las credenciales.');
 		} finally {
 			setLoading(false);
 		}
@@ -74,8 +75,18 @@ const LoginContent = () => {
 							icon={<Lock className="w-5 h-5 mr-2 text-gray-500" />}
 						/>
 
-						<div className="text-sm text-right text-blue-600 font-medium hover:underline cursor-pointer">
-							¿Olvidaste tu contraseña?
+						<div className="space-y-4">
+							<div
+								className="text-sm text-right text-blue-600 font-medium hover:underline cursor-pointer"
+								onClick={() => setForgotOpen(true)}
+							>
+								¿Olvidaste tu contraseña?
+							</div>
+
+							<ForgotPasswordModal
+								isOpen={isForgotOpen}
+								onClose={() => setForgotOpen(false)}
+							/>
 						</div>
 
 						{/* Botón */}
@@ -84,7 +95,9 @@ const LoginContent = () => {
 							onClick={login}
 							disabled={loading}
 							className={`w-full py-3 ${
-								loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#003b99] hover:bg-[#002a6e]'
+								loading
+									? 'bg-gray-400 cursor-not-allowed'
+									: 'bg-[#003b99] hover:bg-[#002a6e]'
 							} text-white font-semibold rounded-xl transition-colors`}
 						>
 							{loading ? 'Ingresando...' : 'Iniciar Sesión'}
