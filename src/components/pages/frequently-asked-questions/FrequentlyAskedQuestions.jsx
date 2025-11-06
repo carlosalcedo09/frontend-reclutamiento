@@ -46,7 +46,7 @@ export default function FrequentlyAskedQuestions() {
 						}
 					>
 						Para registrarte, haz clic en el botón circular de perfil (arriba a la
-						derecha) y selecciona <span className="font-semibold">"Crear cuenta"</span>.
+						derecha) y selecciona <span className="font-semibold">&quot;Crear cuenta&quot;</span>.
 						Completa tu información y empieza a explorar oportunidades laborales de
 						inmediato.
 					</AccordionItem>
@@ -61,7 +61,7 @@ export default function FrequentlyAskedQuestions() {
 							</div>
 						}
 					>
-						Una vez registrado, accede a la sección de "Postulaciones", selecciona la
+						Una vez registrado, accede a la sección de &quot;Postulaciones&quot;, selecciona la
 						oferta que te interese y sigue los pasos para enviar tu postulación en
 						minutos.
 					</AccordionItem>

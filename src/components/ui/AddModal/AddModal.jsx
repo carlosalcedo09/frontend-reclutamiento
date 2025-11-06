@@ -23,10 +23,6 @@ export default function AddModal({ isOpen, onClose, data }) {
 	const { data: session, status } = useSession();
 	const isLoggedIn = status === 'authenticated';
 
-	if (!data) return null;
-
-	const selectedOffer = data;
-
 	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
 	const [modalConfirmContent, setModalConfirmContent] = useState({
 		title: '',
@@ -35,6 +31,10 @@ export default function AddModal({ isOpen, onClose, data }) {
 		icon: '',
 		onAction: null,
 	});
+
+	if (!data) return null;
+
+	const selectedOffer = data;
 
 	const handlePostularme = async () => {
 		if (!isLoggedIn) {
