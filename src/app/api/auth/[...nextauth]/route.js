@@ -3,7 +3,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import axios from 'axios';
 import api from '@/lib/axios';
 
-const API_URL = 'http://127.0.0.1:8000/api/users';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
 export const authOptions = {
 	secret: process.env.NEXTAUTH_SECRET, // 👈 aquí también
@@ -56,7 +57,7 @@ export const authOptions = {
 			// 🔄 Refresh automático
 			if (Date.now() > token.accessExpires) {
 				try {
-					const res = await axios.post(`http://127.0.0.1:8000/api/token/refresh/`, {
+					const res = await axios.post(`${API_URL}/token/refresh/`, {
 						refresh: token.refresh,
 					});
 					token.access = res.data.access;
